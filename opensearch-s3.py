@@ -89,7 +89,6 @@ def registerrepo(_reponame_):
 	Returns:
 		If the snapshot repo does not exist it will create the repo.
 	'''
-
 	print ('[+] {}'.format('Register Snapshot Repository: '+_reponame_))
 	# Register Snapshot Repository
 	payload = {'type':'s3','settings':{'bucket':_reponame_}}
@@ -103,7 +102,9 @@ def registerrepo(_reponame_):
 	else:
 		print(response)
 		json_object = json.loads(response.content)
-		print(json.dumps(json_object, indent = 1))
+        if json_object['acknowledged'] == 'true':
+            print('Repo Registered successfully')
+		    print(json.dumps(json_object, indent = 1))
 
 def takesnapshot(_reponame_,_snapname_,_indicename_):
 	'''Taking snapshot and storing it to S3 repo for backup
