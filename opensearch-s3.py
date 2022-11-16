@@ -159,7 +159,7 @@ def restore(_reponame_,_snapname_):
 		response = requests.post(url+_reponame_+'/'+_snapname_+'/_restore', headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
-		print(f'HTTP error: {http_err}')
+		print(f'Open index with same name already exists delete them inorder to restore: {http_err}')
 	except Exception as err:
 		print(f'Other error: {err}')
 	else:
