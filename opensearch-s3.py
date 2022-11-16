@@ -153,27 +153,51 @@ def status(_reponame_,_snapname_):
 		print(f'Other error: {err}')
 	else:
 		print(response)
-		json_object = json.loads(response.content)
-		print(json.dumps(json_object, indent = 1))
 		print(Fore.GREEN + 'Snapshot Status!!')
 		json_object = json.loads(response.content)
-		print('Name: ' +json_object['snapshots']['snapshot'])
-		print('Indices in snapshot: ' +json_object['snapshots']['indices'])
-		print('Status of snapshot: ' +json_object['state'])
-		print('Failures: ' +json_object['failures'])
-		print('Start time: ' +json_object['start_time']+Style.RESET_ALL)
+		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+
+def restore(_reponame_,_snapname_,_indices_):
+
+	print ('[+] {}'.format('Restore Snapshot: '+_snapname_))
+
+	payload = {'indices':''+_indices_+'','ignore_unavailable':'true','include_global_state':'false','include_aliases':'false','partial':'false'}
+	try:
+		response = requests.put(url+_reponame_+'/'+_snapname_+'/_restore', data=json.dumps(payload), headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		print(Fore.GREEN + 'Snapshot Status!!')
+		json_object = json.loads(response.content)
+		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
 def main():
     start()
     
+	#If testcon is passed in args following function will be called
     if args.testcon:
         testconn(host)
+
+	#If action arg is set to registerrepo following functiuon will be called to register s3 snapshot repo
     elif args.action == 'registerrepo':
         registerrepo(s3repo)
+
+	#If action arg is set to takesnap following function will be called with the repo name, name of snapshot and the indices that you want to include in the snapshot.
     elif args.action == 'takesnap':
-        takesnapshot(s3repo, snapname, indice)
+        takesnapshot(s3repo, snapname, indices)
+
+	#if action arg is set to status following function will be called with repo name and the name of snapshot to check the status.
     elif args.action == 'status':
         status(s3repo, snapname)
+
+	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore indices to openserarch.
+    elif args.action == 'restore':
+        restore(s3repo, snapname, indices)
         
 if __name__ == '__main__':
 	main()
