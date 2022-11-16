@@ -128,9 +128,8 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 	else:
 		print(response)
 		json_object = json.loads(response.content)
-		print(json.dumps(json_object, indent = 1))
-		if json_object['acknowledged']:
-			print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+'/'+_snapname_+Style.RESET_ALL)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+		print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+'/'+_snapname_+Style.RESET_ALL)
   
 def status(_reponame_,_snapname_):
 	'''Check the status of Snapshot if its complete of in progress or if there is any error
