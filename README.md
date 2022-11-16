@@ -18,6 +18,11 @@ Feature Supports:
 
 Before using this make sure that you have installed Opensearch repository-s3 plugin and restart your opensearch service.
 
+```
+$ /usr/share/opensearch/bin/opensearch-plugin install repository-s3 
+$ systemctl restart opensearch
+```
+
 The installation method:
 
 ```shell script
