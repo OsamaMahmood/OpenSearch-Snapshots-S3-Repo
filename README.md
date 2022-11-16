@@ -59,6 +59,11 @@ optional arguments:
 ```
 
 ## Usage
+This script get the authtoken from env variable so you will need to define you Basic Auth token for Opensearch in your env variable.
+
+```
+$ export authtoken='basicauthbase64'
+```
 
 ### Test Connection to Opensearch RestAPI
 
