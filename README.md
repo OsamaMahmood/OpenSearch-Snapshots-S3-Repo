@@ -95,14 +95,98 @@ S3 Snapshot Repo Registered Successfully: s3bucketname
 
 
 ```shell script
-$ python3 opensearch-s3.py --host localhost --action registerrepo --s3repo s3bucketname
+$ python3 opensearch-s3.py --host localhost --action takesnap --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test --indices test-statistics
 
 
  	Creating OpenSearch Snapshots on AWS S3 for Backup.
  	Author: OsamaMahmood - ( https://github.com/OsamaMahmood )
 
 
-[+] Register Snapshot Repository: s3bucketname
+[+] Name of Snapshot to be created: test
 <Response [200]>
-S3 Snapshot Repo Registered Successfully: s3bucketname
+{
+ "accepted": true
+}
+Snapshot Registered Successfully: s3bucketname/test
+```
+
+### Check Snapshot status (Success, Failed, errors)
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action status --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test
+
+
+ 	Creating OpenSearch Snapshots on AWS S3 for Backup.
+ 	Author: OsamaMahmood - ( https://github.com/OsamaMahmood )
+
+
+[+] Check the status of: test
+<Response [200]>
+Snapshot Status!!
+{
+ "snapshots": [
+  {
+   "snapshot": "test",
+   "uuid": "-XgRId07SCGUz-i-h44lqw",
+   "version_id": 135238227,
+   "version": "1.2.4",
+   "indices": [
+    "test-statistics"
+   ],
+   "data_streams": [],
+   "include_global_state": false,
+   "state": "SUCCESS",
+   "start_time": "2022-11-16T12:41:03.258Z",
+   "start_time_in_millis": 1668602463258,
+   "end_time": "2022-11-16T12:41:04.258Z",
+   "end_time_in_millis": 1668602464258,
+   "duration_in_millis": 1000,
+   "failures": [],
+   "shards": {
+    "total": 1,
+    "failed": 0,
+    "successful": 1
+   }
+  }
+ ]
+}
+```
+
+### Restore Complete snapshot to new or same Opensearch instance
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action restore --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test
+
+
+ 	Creating OpenSearch Snapshots on AWS S3 for Backup.
+ 	Author: OsamaMahmood - ( https://github.com/OsamaMahmood )
+
+
+[+] Restore Snapshot: test
+<Response [200]>
+Snapshot Successfully Restored!!
+{
+ "accepted": true
+}
+```
+
+### Restore specific indices from snapshot to new or same Opensearch instance
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action restoreindice --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test --indice sample-index1
+
+
+ 	Creating OpenSearch Snapshots on AWS S3 for Backup.
+ 	Author: OsamaMahmood - ( https://github.com/OsamaMahmood )
+
+
+[+] Restore Specific indices form Snapshot: test Indices: sample-index1
+<Response [200]>
+Indices restore Status!!
+{
+ "accepted": true
+}
 ```
