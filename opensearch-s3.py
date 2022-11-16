@@ -3,7 +3,7 @@ import requests, json, argparse, os
 from requests.exceptions import HTTPError
 from colorama import Style,Fore
 
-# the following line is responsible for suppressing the SSL Cert warning.
+# The following line is responsible for suppressing the SSL Cert warning.
 requests.packages.urllib3.disable_warnings()
 
 def start():
@@ -39,8 +39,7 @@ parser.add_argument('--snap',
 
 parser.add_argument('--action',
                             help = 'List of actions register repo, take snapshot, get snapshot status, restore them.',
-                            choices = ('registerrepo', 'takesnap', 'status', 'restore', 'restoreindice'))
-
+                            choices = ('registerrepo', 'takesnap', 'status', 'restore', 'restoreindice', 'listsnaps', 'listrepos', 'listindices', 'deleterepo', 'deletesnap', 'deleteindice'))
 
 args = parser.parse_args()
 
@@ -64,7 +63,7 @@ def testconn(_host_):
         _host_ (string): IP or hostname of the server.
     '''
     try:
-        url = url = 'https://'+host+':9200/'
+        url = 'https://'+host+':9200/'
         response = requests.get(url, headers=headers, verify=False)
         response.raise_for_status()
     except HTTPError as http_err:
@@ -77,6 +76,61 @@ def testconn(_host_):
         print('Name: ' +json_object['name'])
         print('Cluster Name: ' +json_object['cluster_name'])
         print('Version: ' +json_object['version']['number']+Style.RESET_ALL)
+
+def listrepos():
+	'''
+	Function to list all snapshot repositories
+	'''
+
+	print ('[+] {}'.format('List of Snapshot Repositories'))
+	try:
+		response = requests.get(url, headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+def listsnaps(_s3repo_):
+	'''
+	Function to list all snapshots in a repositoriey
+	'''
+
+	print ('[+] {}'.format('List of Snapshot Repositories'))
+	try:
+		response = requests.get(url+_s3repo_+'/_all', headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+def listindices():
+	'''
+	Function to list all opensearch indices
+	'''
+
+	print ('[+] {}'.format('List of indices'))
+	try:
+		url = 'https://'+host+':9200/_cat/indices'
+		response = requests.get(url, headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
 def registerrepo(_reponame_):
 	'''Register S3 Repo for snapshots using the Opensearch RestAPI
@@ -110,6 +164,7 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 	Args:
 		_reponame_ (string): Name of the snapshot repo this should be same as S3 bucket name for easier managment.
         _snapname_ (string): Name of the snapshot that is going to be created in the S3 repo.
+		_indicename_ (string): Name of the indices you want to take snapshot of.
 	Returns:
 		If the S3 snapshot repo exist it will create new snapshot in the S3 repo.
 	'''
@@ -160,7 +215,7 @@ def restore(_reponame_,_snapname_):
 
 	Args:
 		_reponame_ (string): name of the opensearch s3 repo 
-		_snapname_ (_type_): name of the snapshot want to restore
+		_snapname_ (string): name of the snapshot want to restore
 	'''
 
 	print ('[+] {}'.format('Restore Snapshot: '+_snapname_))
@@ -229,6 +284,10 @@ def main():
 	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore specific indices to openserarch.
     elif args.action == 'restoreindice':
         restoreindice(s3repo, snapname, indices)
+
+	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore specific indices to openserarch.
+    elif args.action == 'listrepos':
+        listrepos()
         
 if __name__ == '__main__':
 	main()
