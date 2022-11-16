@@ -143,7 +143,7 @@ def status(_reponame_,_snapname_):
 		response = requests.get(url+_reponame_+'/'+_snapname_, headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
-		print(f'HTTP error: {http_err}')
+		print(f'Snapshot not found: {http_err}')
 	except Exception as err:
 		print(f'Other error: {err}')
 	else:
@@ -153,6 +153,13 @@ def status(_reponame_,_snapname_):
 		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
 def restore(_reponame_,_snapname_):
+	'''
+	Function to restore complete snapshot to opensearch.
+
+	Args:
+		_reponame_ (string): name of the opensearch s3 repo 
+		_snapname_ (_type_): name of the snapshot want to restore
+	'''
 
 	print ('[+] {}'.format('Restore Snapshot: '+_snapname_))
 	try:
@@ -169,6 +176,14 @@ def restore(_reponame_,_snapname_):
 		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
 def restoreindice(_reponame_,_snapname_,_indices_):
+	'''
+	Fucntion to restore specific indices from a snapshot
+
+	Args:
+		_reponame_ (string): name of the opensearch s3 repo
+		_snapname_ (string): name of snapshot
+		_indices_ (string): name of indices you want to restore ex indice1,indice2
+	'''
 
 	print ('[+] {}'.format('Restore Specific indices form Snapshot: '+_snapname_+' Indices: '+_indices_))
 
@@ -178,12 +193,12 @@ def restoreindice(_reponame_,_snapname_,_indices_):
 		response = requests.post(url+_reponame_+'/'+_snapname_+'/_restore', data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
-		print(f'HTTP error: {http_err}')
+		print(f'Open index with same name already exists delete them inorder to restore: {http_err}')
 	except Exception as err:
 		print(f'Other error: {err}')
 	else:
 		print(response)
-		print(Fore.GREEN + 'Snapshot Status!!')
+		print(Fore.GREEN + 'Indices restore Status!!')
 		json_object = json.loads(response.content)
 		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
