@@ -129,7 +129,7 @@ def listindices(_host_):
 		print(f'Other error: {err}')
 	else:
 		print(response)
-		print(Fore.GREEN +response.content+Style.RESET_ALL)
+		print(Fore.GREEN +response.content.decode('utf-8')+Style.RESET_ALL)
 
 def registerrepo(_reponame_):
 	'''Register S3 Repo for snapshots using the Opensearch RestAPI
