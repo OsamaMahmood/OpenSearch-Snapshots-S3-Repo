@@ -104,7 +104,7 @@ def registerrepo(_reponame_):
 		print(response)
 		json_object = json.loads(response.content)
 		if json_object['acknowledged']:
-			print('Snapshot Registered Successfully: '+_reponame_)
+			print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+Style.RESET_ALL)
 
 def takesnapshot(_reponame_,_snapname_,_indicename_):
 	'''Taking snapshot and storing it to S3 repo for backup
