@@ -103,6 +103,7 @@ def registerrepo(_reponame_):
 	else:
 		print(response)
 		json_object = json.loads(response.content)
+		print('Scuccess'+json_object['acknowledged'])
 		if json_object['acknowledged'] == 'true':
 			print('Snapshot Registered Successfully: '+_reponame_)
 
