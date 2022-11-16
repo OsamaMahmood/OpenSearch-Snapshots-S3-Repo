@@ -211,7 +211,7 @@ def main():
         restore(s3repo, snapname)
 
 	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore specific indices to openserarch.
-    elif args.action == 'restore':
+    elif args.action == 'restoreindice':
         restoreindice(s3repo, snapname, indices)
         
 if __name__ == '__main__':
