@@ -343,6 +343,14 @@ def main():
     elif args.action == 'listrepos':
         listrepos()
 
+	#if action arg is set to listsnaps following function will be called to list all snapshots in a repo.
+    elif args.action == 'listsnaps':
+        listsnaps(s3repo)
+
+	#if action arg is set to listindices following function will be called to list all indices in opensearch.
+    elif args.action == 'listindices':
+        listindices(host)
+
 	#if action arg is set to deleterepo following function will be called with s3repo name to delete the repo.
     elif args.action == 'deleterepo':
         deleterepo(s3repo)
