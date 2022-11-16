@@ -257,6 +257,61 @@ def restoreindice(_reponame_,_snapname_,_indices_):
 		json_object = json.loads(response.content)
 		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
+def deleterepo(_s3repo_):
+	'''
+	Function to delete repository
+	'''
+
+	print ('[+] {}'.format('Delete Snapshot Repository'))
+	try:
+		response = requests.delete(url+_s3repo_, headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+def deletesnap(_s3repo_,_snapname_):
+	'''
+	Function to delete snapshot in repository
+	'''
+
+	print ('[+] {}'.format('Delete Snapshot in Repository'))
+	try:
+		response = requests.delete(url+_s3repo_+'/'+_snapname_, headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+def deleteindice(_host_,_indice_):
+	'''
+	Function to delete indices from opensearch
+	'''
+
+	print ('[+] {}'.format('Delete indices'))
+	url = 'https://'+host+':9200/'
+	try:
+		response = requests.delete(url+_indice_, headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		json_object = json.loads(response.content)
+		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
 def main():
     start()
     
@@ -288,14 +343,19 @@ def main():
     elif args.action == 'listrepos':
         listrepos()
 
-	#if action arg is set to listsnaps following function will be called with s3repo name to list all snapshot that are stored in the repo.
-    elif args.action == 'listsnaps':
-        listsnaps(s3repo)
+	#if action arg is set to deleterepo following function will be called with s3repo name to delete the repo.
+    elif args.action == 'deleterepo':
+        deleterepo(s3repo)
 
-	#if action arg is set to listindices following function will be called to list all indices on opensearch
-    elif args.action == 'listindices':
-        listindices(host)
-        
+	#if action arg is set to deletesnap following function will be called with repo name and snap name to delete snapshot in repo.
+    elif args.action == 'deletesnap':
+        deletesnap(s3repo, snapname)
+
+	#if action arg is set to deleteindice following function will be called to delete that indice on opensearch
+    elif args.action == 'deleteindice':
+        deleteindice(host, indices)
+
+
 if __name__ == '__main__':
 	main()
     
