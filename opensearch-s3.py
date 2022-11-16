@@ -48,7 +48,7 @@ args = parser.parse_args()
 
 host = args.host
 s3repo = args.s3repo
-indice = args.indice
+indices = args.indices
 snapname = args.snap
 
 # Get environment variables
