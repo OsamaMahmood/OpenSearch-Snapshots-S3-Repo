@@ -113,7 +113,7 @@ def listsnaps(_s3repo_):
 		json_object = json.loads(response.content)
 		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
-def listindices():
+def listindices(_host_):
 	'''
 	Function to list all opensearch indices
 	'''
@@ -285,9 +285,17 @@ def main():
     elif args.action == 'restoreindice':
         restoreindice(s3repo, snapname, indices)
 
-	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore specific indices to openserarch.
+	#if action arg is set to listrepos following function will be called to list all repos that are registered.
     elif args.action == 'listrepos':
         listrepos()
+
+	#if action arg is set to listsnaps following function will be called with s3repo name to list all snapshot that are stored in the repo.
+    elif args.action == 'listsnaps':
+        listsnaps(s3repo)
+
+	#if action arg is set to listindices following function will be called to list all indices on opensearch
+    elif args.action == 'listindices':
+        listindices(host)
         
 if __name__ == '__main__':
 	main()
