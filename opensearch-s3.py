@@ -119,7 +119,7 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 		response = requests.put(url+_reponame_+'/'+_snapname_, data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
-		print(f'HTTP error: {http_err}')
+		print(f'HTTP error: {http_err.read().decode()}')
 	except Exception as err:
 		print(f'Other error: {err}')
 	else:
