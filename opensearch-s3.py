@@ -27,8 +27,8 @@ parser.add_argument('--testcon',
                             help = 'To test connection to Opensearch RestAPI',
                             action = 'store_true')
 
-parser.add_argument('--indice',
-                            help = 'Name of indice to be backedup',
+parser.add_argument('--indices',
+                            help = 'Name of indices to be backedup Ex: indice1,indice2-*,..',
                             type = str)
 
 parser.add_argument('--s3repo',
@@ -104,7 +104,7 @@ def registerrepo(_reponame_):
 		print(response)
 		json_object = json.loads(response.content)
 		if json_object['acknowledged']:
-			print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+Style.RESET_ALL)
+			print(Fore.GREEN +'S3 Snapshot Repo Registered Successfully: '+_reponame_+Style.RESET_ALL)
 
 def takesnapshot(_reponame_,_snapname_,_indicename_):
 	'''Taking snapshot and storing it to S3 repo for backup
@@ -131,6 +131,8 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 		print(response)
 		json_object = json.loads(response.content)
 		print(json.dumps(json_object, indent = 1))
+		if json_object['acknowledged']:
+			print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+'/'+_snapname_+Style.RESET_ALL)
   
 def status(_reponame_,_snapname_):
 	'''Check the status of Snapshot if its complete of in progress or if there is any error
@@ -153,6 +155,13 @@ def status(_reponame_,_snapname_):
 		print(response)
 		json_object = json.loads(response.content)
 		print(json.dumps(json_object, indent = 1))
+		print(Fore.GREEN + 'Snapshot Status!!')
+		json_object = json.loads(response.content)
+		print('Name: ' +json_object['snapshots']['snapshot'])
+		print('Indices in snapshot: ' +json_object['snapshots']['indices'])
+		print('Status of snapshot: ' +json_object['state'])
+		print('Failures: ' +json_object['failures'])
+		print('Start time: ' +json_object['start_time']+Style.RESET_ALL)
 
 def main():
     start()
