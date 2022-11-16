@@ -95,7 +95,7 @@ S3 Snapshot Repo Registered Successfully: s3bucketname
 
 
 ```shell script
-$ python3 opensearch-s3.py --host localhost --action takesnap --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test --indices test-statistics
+$ python3 opensearch-s3.py --host localhost --action takesnap --s3repo s3bucketname --snap test --indices test-statistics
 
 
  	Creating OpenSearch Snapshots on AWS S3 for Backup.
@@ -114,7 +114,7 @@ Snapshot Registered Successfully: s3bucketname/test
 
 
 ```shell script
-$ python3 opensearch-s3.py --host localhost --action status --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test
+$ python3 opensearch-s3.py --host localhost --action status --s3repo s3bucketname --snap test
 
 
  	Creating OpenSearch Snapshots on AWS S3 for Backup.
@@ -157,7 +157,7 @@ Snapshot Status!!
 
 
 ```shell script
-$ python3 opensearch-s3.py --host localhost --action restore --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test
+$ python3 opensearch-s3.py --host localhost --action restore --s3repo s3bucketname --snap test
 
 
  	Creating OpenSearch Snapshots on AWS S3 for Backup.
@@ -176,7 +176,7 @@ Snapshot Successfully Restored!!
 
 
 ```shell script
-$ python3 opensearch-s3.py --host localhost --action restoreindice --s3repo security-wazuh-backup-e23630ab91ee6a46 --snap test --indice sample-index1
+$ python3 opensearch-s3.py --host localhost --action restoreindice --s3repo s3bucketname --snap test --indice sample-index1
 
 
  	Creating OpenSearch Snapshots on AWS S3 for Backup.
