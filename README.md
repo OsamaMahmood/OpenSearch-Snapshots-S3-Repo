@@ -13,6 +13,12 @@ Feature Supports:
 - [x] Check Snapshot status (Success, Failed, errors)
 - [x] Restore Complete snapshot to new or same Opensearch instance
 - [x] Restore specific indices from snapshot to new or same Opensearch instance
+- [x] List all S3 repositories that are registered
+- [x] List all snapshots with in a S3 repository
+- [x] List all indices present on Opensearch
+- [x] Delete S3 repository
+- [x] Delete snapshot with in S3 repository
+- [x] Delete indice present on Opensearch
 
 ## Setup Instructions
 
@@ -200,3 +206,29 @@ Indices restore Status!!
  "accepted": true
 }
 ```
+
+### List all S3 repositories that are registered
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action listrepos
+```
+
+### List all snapshots with in a S3 repository
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action listsnaps --s3repo s3bucketname
+```
+
+### List all indices present on Opensearch
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action listindices
+```
+
+
+- [x] Delete S3 repository
+- [x] Delete snapshot with in S3 repository
+- [x] Delete indice present on Opensearch
