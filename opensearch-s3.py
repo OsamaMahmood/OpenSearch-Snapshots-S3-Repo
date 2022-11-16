@@ -36,7 +36,7 @@ parser.add_argument('--snap',
 
 parser.add_argument('--action',
                             help = 'List of actions register repo, take snapshot, get snapshot status, restore',
-                            choices = ('registerrepo', 'takesnap', 'status', 'restore'))
+                            choices = ('registerrepo', 'takesnap', 'status', 'restore', 'restoreindice'))
 
 
 args = parser.parse_args()
@@ -119,7 +119,7 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 		response = requests.put(url+_reponame_+'/'+_snapname_, data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
-		print(f'HTTP error: {http_err.response}')
+		print(f'Snapshot with same name already exists: {http_err}')
 	except Exception as err:
 		print(f'Other error: {err}')
 	else:
@@ -152,14 +152,29 @@ def status(_reponame_,_snapname_):
 		json_object = json.loads(response.content)
 		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
 
-
-def restore(_reponame_,_snapname_,_indices_):
+def restore(_reponame_,_snapname_):
 
 	print ('[+] {}'.format('Restore Snapshot: '+_snapname_))
+	try:
+		response = requests.post(url+_reponame_+'/'+_snapname_+'/_restore', headers=headers, verify=False)
+		response.raise_for_status()
+	except HTTPError as http_err:
+		print(f'HTTP error: {http_err}')
+	except Exception as err:
+		print(f'Other error: {err}')
+	else:
+		print(response)
+		print(Fore.GREEN + 'Snapshot Successfully Restored!!')
+		json_object = json.loads(response.content)
+		print(json.dumps(json_object, indent = 1)+Style.RESET_ALL)
+
+def restoreindice(_reponame_,_snapname_,_indices_):
+
+	print ('[+] {}'.format('Restore Specific indices form Snapshot: '+_snapname_+' Indices: '+_indices_))
 
 	payload = {'indices':''+_indices_+'','ignore_unavailable':'true','include_global_state':'false','include_aliases':'false','partial':'false'}
 	try:
-		response = requests.put(url+_reponame_+'/'+_snapname_+'/_restore', data=json.dumps(payload), headers=headers, verify=False)
+		response = requests.post(url+_reponame_+'/'+_snapname_+'/_restore', data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
 		print(f'HTTP error: {http_err}')
@@ -190,9 +205,13 @@ def main():
     elif args.action == 'status':
         status(s3repo, snapname)
 
-	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore indices to openserarch.
+	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore to openserarch.
     elif args.action == 'restore':
-        restore(s3repo, snapname, indices)
+        restore(s3repo, snapname)
+
+	#if action arg is set to restore following function will be called with repo name and the name of snapshot to restore specific indices to openserarch.
+    elif args.action == 'restore':
+        restoreindice(s3repo, snapname, indices)
         
 if __name__ == '__main__':
 	main()
