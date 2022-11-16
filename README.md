@@ -228,7 +228,23 @@ $ python3 opensearch-s3.py --host localhost --action listsnaps --s3repo s3bucket
 $ python3 opensearch-s3.py --host localhost --action listindices
 ```
 
+### Delete S3 repository
 
-- [x] Delete S3 repository
-- [x] Delete snapshot with in S3 repository
-- [x] Delete indice present on Opensearch
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action deleterepo --s3repo s3bucketname
+```
+
+### Delete snapshot with in S3 repository
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action deletesnap --s3repo s3bucketname --snap nameofsnapshot
+```
+
+### Delete indice present on Opensearch
+
+
+```shell script
+$ python3 opensearch-s3.py --host localhost --action deleteindice --indices indice-name
+```
