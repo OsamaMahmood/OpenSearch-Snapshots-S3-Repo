@@ -174,6 +174,7 @@ def restoreindice(_reponame_,_snapname_,_indices_):
 
 	payload = {'indices':''+_indices_+'','ignore_unavailable':'true','include_global_state':'false','include_aliases':'false','partial':'false'}
 	try:
+		print(url+_reponame_+'/'+_snapname_+'/_restore')
 		response = requests.post(url+_reponame_+'/'+_snapname_+'/_restore', data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
