@@ -3,11 +3,6 @@ import requests, json, argparse, os
 from requests.exceptions import HTTPError
 from colorama import Style,Fore
 
-if os.name == 'nt':
-	os.system('cls')
-else:
-	os.system('clear')
-
 def start():
 	print('''
 
