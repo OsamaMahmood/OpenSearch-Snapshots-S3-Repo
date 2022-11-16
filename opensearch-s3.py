@@ -3,6 +3,9 @@ import requests, json, argparse, os
 from requests.exceptions import HTTPError
 from colorama import Style,Fore
 
+# the following line is responsible for suppressing the SSL Cert warning.
+requests.packages.urllib3.disable_warnings()
+
 def start():
 	print('''
 
@@ -35,7 +38,7 @@ parser.add_argument('--snap',
                             type = str)
 
 parser.add_argument('--action',
-                            help = 'List of actions register repo, take snapshot, get snapshot status, restore',
+                            help = 'List of actions register repo, take snapshot, get snapshot status, restore them.',
                             choices = ('registerrepo', 'takesnap', 'status', 'restore', 'restoreindice'))
 
 
