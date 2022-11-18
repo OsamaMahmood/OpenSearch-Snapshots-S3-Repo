@@ -2,6 +2,7 @@
 import requests, json, argparse, os
 from requests.exceptions import HTTPError
 from colorama import Style,Fore
+from datetime import datetime
 
 # The following line is responsible for suppressing the SSL Cert warning.
 requests.packages.urllib3.disable_warnings()
@@ -46,7 +47,7 @@ args = parser.parse_args()
 host = args.host
 s3repo = args.s3repo
 indices = args.indices
-snapname = args.snap
+snapname = args.snap+'-'+str(datetime.date(datetime.now()))
 
 # Get environment variables
 authtoken = os.environ.get('authtoken')
