@@ -118,12 +118,12 @@ $ python3 opensearch-s3.py --host localhost --action takesnap --s3repo s3bucketn
  	Author: OsamaMahmood - ( https://github.com/OsamaMahmood )
 
 
-[+] Name of Snapshot to be created: test
+[+] Name of Snapshot to be created: test-<currentdate>
 <Response [200]>
 {
  "accepted": true
 }
-Snapshot Registered Successfully: s3bucketname/test
+Snapshot Registered Successfully: s3bucketname/test-2022-11-18
 ```
 
 ### Check Snapshot status (Success, Failed, errors)
