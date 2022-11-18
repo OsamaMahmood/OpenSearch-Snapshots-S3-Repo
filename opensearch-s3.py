@@ -47,7 +47,7 @@ args = parser.parse_args()
 host = args.host
 s3repo = args.s3repo
 indices = args.indices
-snapname = args.snap+'-'+str(datetime.date(datetime.now()))
+snapname = args.snap
 
 # Get environment variables
 authtoken = os.environ.get('authtoken')
@@ -170,11 +170,11 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 	'''
 
 	print ('[+] {}'.format('Name of Snapshot to be created: '+_snapname_))
-
+	snapnamedate=_snapname_+'-'+str(datetime.date(datetime.now()))
 	# Name of indices that need to be backedup.
 	payload = {'indices':''+_indicename_+'','ignore_unavailable':'true','include_global_state':'false','partial':'false'}
 	try:
-		response = requests.put(url+_reponame_+'/'+_snapname_, data=json.dumps(payload), headers=headers, verify=False)
+		response = requests.put(url+_reponame_+'/'+snapnamedate, data=json.dumps(payload), headers=headers, verify=False)
 		response.raise_for_status()
 	except HTTPError as http_err:
 		print(f'Snapshot with same name already exists: {http_err}')
