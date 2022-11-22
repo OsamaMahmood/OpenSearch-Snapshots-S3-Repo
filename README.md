@@ -50,23 +50,21 @@ Run the tool:
 ```shell script
 $ python3 opensearch-s3.py -h
 
-usage: opensearch-s3.py [-h] --host HOST [--testcon] [--indices INDICES]
-                        [--s3repo S3REPO] [--snap SNAP]
-                        [--action {registerrepo,takesnap,status,restore,restoreindice}]
+usage: opensearch-s3.py [-h] --host HOST [--testcon] [--indices INDICES] [--s3repo S3REPO] [--snap SNAP] [--auth AUTH]
+                        [--action {registerrepo,takesnap,status,restore,restoreindice,listsnaps,listrepos,listindices,deleterepo,deletesnap,deleteindice}]
 
 Script Creating and Restoring OpenSearch Snapshots on AWS S3 for Backup.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --host HOST           Opensearch Host
   --testcon             To test connection to Opensearch RestAPI
-  --indices INDICES     Name of indices to be backedup Ex:
-                        indice1,indice2-*,..
+  --indices INDICES     Name of indices to be backedup Ex: indice1,indice2-*,..
   --s3repo S3REPO       S3 Snapshot Repository Name
   --snap SNAP           Name of snapshot you want to create
-  --action {registerrepo,takesnap,status,restore,restoreindice}
-                        List of actions register repo, take snapshot, get
-                        snapshot status, restore them.
+  --auth AUTH           Basic HTTP Auth Token
+  --action {registerrepo,takesnap,status,restore,restoreindice,listsnaps,listrepos,listindices,deleterepo,deletesnap,deleteindice}
+                        List of actions register repo, take snapshot, get snapshot status, restore them.
 ```
 
 ## Usage
@@ -74,6 +72,11 @@ This script get the authtoken from env variable so you will need to define you B
 
 ```
 $ export authtoken='basicauthbase64'
+```
+Also if you don't want to use env variables you can pass the auth token using arguments
+
+```
+$ python3 opensearch-s3.py --host localhost --action status --s3repo test --snap test --auth 'YWRtaW46YWRtaW4='
 ```
 
 ### Test Connection to Opensearch RestAPI
