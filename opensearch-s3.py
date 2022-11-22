@@ -38,6 +38,10 @@ parser.add_argument('--snap',
                             help = 'Name of snapshot you want to create',
                             type = str)
 
+parser.add_argument('--auth',
+                            help = 'Basic HTTP Auth Token',
+                            type = str)
+
 parser.add_argument('--action',
                             help = 'List of actions register repo, take snapshot, get snapshot status, restore them.',
                             choices = ('registerrepo', 'takesnap', 'status', 'restore', 'restoreindice', 'listsnaps', 'listrepos', 'listindices', 'deleterepo', 'deletesnap', 'deleteindice'))
@@ -50,7 +54,10 @@ indices = args.indices
 snapname = args.snap
 
 # Get environment variables
-authtoken = os.environ.get('authtoken')
+if args.auth:
+	authtoken = args.auth
+else:	
+	authtoken = os.environ.get('authtoken')
 
 # Global variables
 url = 'https://'+host+':9200/_snapshot/'
@@ -169,9 +176,9 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 		If the S3 snapshot repo exist it will create new snapshot in the S3 repo.
 	'''
 
+	print ('[+] {}'.format('Name of Snapshot to be created: '+_snapname_))
 	snapnamedate=_snapname_+'-'+str(datetime.date(datetime.now()))
-	
-	print ('[+] {}'.format('Name of Snapshot to be created: '+snapnamedate))
+	print(snapnamedate)
 	# Name of indices that need to be backedup.
 	payload = {'indices':''+_indicename_+'','ignore_unavailable':'true','include_global_state':'false','partial':'false'}
 	try:
@@ -185,7 +192,7 @@ def takesnapshot(_reponame_,_snapname_,_indicename_):
 		print(response)
 		json_object = json.loads(response.content)
 		print(Fore.GREEN +json.dumps(json_object, indent = 1)+Style.RESET_ALL)
-		print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+'/'+snapnamedate+Style.RESET_ALL)
+		print(Fore.GREEN +'Snapshot Registered Successfully: '+_reponame_+'/'+_snapname_+Style.RESET_ALL)
   
 def status(_reponame_,_snapname_):
 	'''Check the status of Snapshot if its complete of in progress or if there is any error
@@ -368,4 +375,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-    
